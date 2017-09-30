@@ -8,8 +8,10 @@ open class CExp(iStartingLevel : Int) {
         get() = m_Exp
     val Level : Int
         get() = m_CurrentLevel
-    val ExpToNextLevel
+    val ExpToNextLevel : Int
         get() = m_FuncExp(m_CurrentLevel + 1) - m_Exp
+    val MaxLevel : Int
+        get() = MAX_LEVEL
     //  *** MEMBERS ***
     protected var m_FuncExp : (Int) -> Int = { m_FuncPow(it, 2) + m_FuncPow(3 * (it - 1), 2) - 1 }
     private val m_FuncPow : (Int, Int) -> Int = { base, exp -> pow(base.toDouble(), exp.toDouble()).toInt() }
@@ -44,13 +46,15 @@ open class CExp(iStartingLevel : Int) {
         m_FuncExp = iFunc
     }
 }
-//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
 class CExpProgressive(iStartingLevel : Int) : CExp(iStartingLevel) {
     //  *** EVENTS ***
     private val eventhandler_onLevelGained = EventHandler<Int>()
     val onLevelGained = Event(eventhandler_onLevelGained)
     private val eventhandler_onExpGained = EventHandler<Int>()
     val onExpGained = Event(eventhandler_onExpGained)
+    private val eventhandler_OnExpProgressionEnd = EventHandler<Int>()
+    val onExpProgressionEnd = Event(eventhandler_OnExpProgressionEnd)
     //  *** METHODS ***
     fun AddExpProgression(iAmount : Int) {
         var counter = 0
@@ -71,11 +75,15 @@ class CExpProgressive(iStartingLevel : Int) : CExp(iStartingLevel) {
                 LaunchOnLevelGained(m_CurrentLevel)
             }
         }
+        LaunchOnExpProgressionEnd(m_Exp)
     }
     private fun LaunchOnLevelGained(iCurrentLevel : Int) {
         eventhandler_onLevelGained(iCurrentLevel)
     }
     private fun LaunchOnExpGained(iCurrentExp : Int) {
         eventhandler_onExpGained(iCurrentExp)
+    }
+    private fun LaunchOnExpProgressionEnd(iFinalExp : Int) {
+        eventhandler_OnExpProgressionEnd(iFinalExp)
     }
 }
