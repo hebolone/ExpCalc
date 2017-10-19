@@ -80,6 +80,7 @@ class CExpProgressive(iStartingLevel : Int) : CExp(iStartingLevel) {
                 LaunchOnLevelGained(m_CurrentLevel)
             }
         }
+        LaunchOnExpProgressionEnd(m_Exp)
     }
     private fun LaunchOnLevelGained(iCurrentLevel : Int) {
         eventhandler_onLevelGained(iCurrentLevel)
