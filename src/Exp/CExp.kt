@@ -56,8 +56,9 @@ class CExpProgressive(iStartingLevel : Int) : CExp(iStartingLevel) {
     private val eventhandler_OnExpProgressionEnd = EventHandler<Int>()
     val onExpProgressionEnd = Event(eventhandler_OnExpProgressionEnd)
     //  *** METHODS ***
-    fun AddExpProgression(iAmount : Int) {
+    fun AddExpProgression(iAmount : Int, iStep : Int = 10) {
         var counter = 0
+        var counterStep = 0
         while(counter < iAmount) {
             counter ++
             m_Exp ++
@@ -75,7 +76,12 @@ class CExpProgressive(iStartingLevel : Int) : CExp(iStartingLevel) {
                 LaunchOnLevelGained(m_CurrentLevel)
             }
         }
-        LaunchOnExpProgressionEnd(m_Exp)
+        //  Check for exp progression event
+        counterStep ++
+        if(counterStep == iStep) {
+            counterStep = 0
+            LaunchOnExpProgressionEnd(m_Exp)
+        }
     }
     private fun LaunchOnLevelGained(iCurrentLevel : Int) {
         eventhandler_onLevelGained(iCurrentLevel)
